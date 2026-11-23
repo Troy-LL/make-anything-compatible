@@ -1,0 +1,23 @@
+name: Host report
+description: Describe a constrained machine you would like the doctor to support later.
+title: "[host] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The first host is a 2017 Intel MacBook Pro on Ventura. Other hosts are after the MVP, but reports help shape the fingerprint fields.
+  - type: textarea
+    id: machine
+    attributes:
+      label: Machine
+      description: Model, OS and version, CPU, GPU, RAM, and toolchain versions.
+    validations:
+      required: true
+  - type: textarea
+    id: blocks
+    attributes:
+      label: What keeps failing on it
+      description: Repos or tools, with links if you have them.
+    validations:
+      required: true
