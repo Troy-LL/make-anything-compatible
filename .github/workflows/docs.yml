@@ -28,4 +28,5 @@ jobs:
             --timeout 30
             --max-concurrency 4
             --exclude 'intel\.com'
+            --exclude 'appleinsider\.com'
             '**/*.md'
