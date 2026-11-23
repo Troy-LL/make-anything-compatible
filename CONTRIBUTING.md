@@ -6,6 +6,10 @@ Issues are the specs. Open product work is listed in the [README](README.md#wher
 
 These docs make claims about other projects: which versions ship for which OS, and what fails where. Every such claim needs a link to the project's own docs, release notes, registry data, or issues. If you cannot find one, mark the claim unverified. Please do not add numbers you cannot link.
 
+## Link checks
+
+The docs CI checks every link, except appleinsider.com and intel.com. Those sites block bots, so the checker skips them. Their links were checked by hand.
+
 ## Pull requests
 
 - One change per PR, against `main`.

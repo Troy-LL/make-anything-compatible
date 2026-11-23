@@ -1,17 +1,19 @@
 # Make Anything Compatible
 
-**Know if a repo will run on your Mac before you lose an afternoon finding out.**
-
-Point it at a GitHub repo. It reads your machine, reads the repo, and tells you one of three things: it runs as is, it runs with these exact changes, or it will not run here and here is why. When there is a fix, it proves the fix by building it twice, the second time from nothing.
-
-> [!NOTE]
-> This is spec stage. Nothing is implemented yet. The first work is the host probe in [issue #1](https://github.com/Troy-LL/make-anything-compatible/issues/1) and the baseline in [issue #2](https://github.com/Troy-LL/make-anything-compatible/issues/2). See [Where it's at](#where-its-at).
-
 ![Spec stage](https://img.shields.io/badge/status-spec%20stage-d97706?style=flat-square)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-3f3f46?style=flat-square)](LICENSE)
 ![Skills and CLI](https://img.shields.io/badge/interface-Skills%20%2B%20CLI-0f766e?style=flat-square)
 ![First host](https://img.shields.io/badge/first%20host-Intel%20Mac%2C%20Ventura-6d28d9?style=flat-square)
 [![Docs](https://img.shields.io/github/actions/workflow/status/Troy-LL/make-anything-compatible/docs.yml?branch=main&style=flat-square&label=docs)](https://github.com/Troy-LL/make-anything-compatible/actions/workflows/docs.yml)
+
+**Find out if a repo built for new Macs will run on your older Intel Mac, before you lose an afternoon trying.**
+
+Point it at a GitHub repo and you get one answer. It runs as is, it runs with these exact changes, or it won't run here and here's why. Every fix is proven by building it twice, the second time from scratch.
+
+First host: Intel Macs on Ventura. More machines later ([decision 001](docs/decisions/001-constrained-hardware-first-host.md)).
+
+> [!NOTE]
+> This is spec stage. Nothing is implemented yet. The first work is the host probe in [issue #1](https://github.com/Troy-LL/make-anything-compatible/issues/1) and the baseline in [issue #2](https://github.com/Troy-LL/make-anything-compatible/issues/2). See [Where it's at](#where-its-at).
 
 ```mermaid
 flowchart LR
@@ -22,11 +24,20 @@ flowchart LR
   C -->|hard wall| W[Reason and the cheapest way out]
 ```
 
-We call it a compatibility doctor. It looks at the patient first, then the prescription, and it is allowed to say "this one is not treatable here."
+Think of it as a compatibility doctor that's allowed to say no.
+
+## What you give it, what you get
+
+| You give it | It does | You get |
+| --- | --- | --- |
+| Nothing but your machine | Reads the OS, CPU flags, GPU, RAM, Xcode, SDK, and runtimes. Read only. | A fingerprint, with the command behind every field |
+| A repo URL | Reads its manifests, CI, README, and the registry data for what it pulls in | One verdict, and every blocker with its class and evidence |
+| A "runs with a fix" verdict | Writes the exact pins, flags, and commands, runs them in a throwaway env, then rebuilds from clean | A recipe that passed replay, or a plain report that it did not |
+| A call from your agent | The skills pack teaches the agent to drive the `compat` CLI | The same records a terminal run writes. JSON in and out |
 
 ## Why this exists
 
-The tools people use to install software on Intel Macs are leaving, one at a time. Each one is a sourced fact, not a prediction:
+The tools people use to install software on Intel Macs are leaving, one at a time. Every row links its source.
 
 | Layer | What changed | Source |
 | --- | --- | --- |
@@ -38,15 +49,6 @@ The tools people use to install software on Intel Macs are leaving, one at a tim
 
 So a lot of repos that "just work" on a new Mac fail on an older one. Some of them have a cheap fix, like an older pin or a CPU-only build. Some of them never will. Today you find out which by trying installs until one sticks or you give up.
 
-## What you give it, what you get
-
-| You give it | It does | You get |
-| --- | --- | --- |
-| Nothing but your machine | Reads the OS, CPU flags, GPU, RAM, Xcode, SDK, and runtimes. Read only. | A fingerprint, with the command behind every field |
-| A repo URL | Reads its manifests, CI, README, and the registry data for what it pulls in | One verdict, and every blocker with its class and evidence |
-| A "runs with a fix" verdict | Writes the exact pins, flags, and commands, runs them in a throwaway env, then rebuilds from clean | A recipe that passed replay, or a plain report that it did not |
-| A call from your agent | The skills pack teaches the agent to drive the `compat` CLI | The same records a terminal run writes. JSON in and out |
-
 ## Three answers, never a fourth
 
 | Verdict | Means | Example on the first host |
@@ -57,9 +59,12 @@ So a lot of repos that "just work" on a new Mac fail on an older one. Some of th
 
 There is no "probably fine." A fix that has not passed replay is not a fix. If a different tool would do the job, that is a hard wall for this repo with a suggestion attached, not a success. See [decision 003](docs/decisions/003-three-verdicts-honest-walls.md).
 
-## Six ways out
+## Six kinds of fix, cheapest first
 
-Every blocker gets exactly one class. They are tried from cheapest to most invasive:
+Every blocker gets exactly one class, tried from cheapest to most invasive: pin, rebuild, swap backend, containerize, OS upgrade, hard wall. The rule behind the order is [decision 002](docs/decisions/002-adapt-the-software-not-the-host.md): change the software to fit the machine, not the other way round.
+
+<details>
+<summary>The six classes, with examples</summary>
 
 | Class | What it means | Example |
 | --- | --- | --- |
@@ -70,11 +75,11 @@ Every blocker gets exactly one class. They are tried from cheapest to most invas
 | OS upgrade | Only a newer macOS lifts the limit | Reported with its risk. Never run for you |
 | Hard wall | No honest path | [bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes), macOS 14 and arm64 only |
 
-The rule behind the order is [decision 002](docs/decisions/002-adapt-the-software-not-the-host.md): change the software to fit the machine, not the other way round.
+</details>
 
 ## See a run
 
-This is the planned flow, not a captured result. It invents no timings or scores.
+Planned, not a captured result. It invents no timings or scores.
 
 Fingerprint the machine:
 
@@ -133,7 +138,7 @@ The success check is the repo's own tests, or the demo command in its README. Re
 
 ## Use it from your agent
 
-Planned. Install the skills pack, then ask your agent. The skills teach it to drive the `compat` CLI and to report a hard wall plainly.
+Planned, not a captured result. Install the skills pack, then ask your agent. The skills teach it to drive the `compat` CLI and to report a hard wall plainly.
 
 ```sh
 npx skills add https://github.com/Troy-LL/make-anything-compatible
@@ -147,10 +152,9 @@ Ask your agent:
 I want to run this repo on my 2017 MacBook Pro. Check it first. If there's a fix, show me the recipe before you install anything, then prove it with a clean replay. If it can't run here, tell me why and what I could use instead.
 ```
 
-Or from the terminal:
+Or from the terminal. These commands are planned:
 
-```text
-# Planned
+```sh
 compat probe
 compat check <repo>
 compat plan
@@ -162,16 +166,16 @@ A tiny MCP server may come later as an extra. It is not part of the first versio
 
 ## How it's different from setup agents
 
-There is a lot of good work on agents that set up a repo for you. Almost all of it assumes a Linux container.
+Most setup agents assume a Linux container. Sources are in [Prior art](#prior-art).
 
-- They pick a Docker base image. We read the machine you actually have, and that machine is the constraint.
-- They treat "this hardware cannot do it" as a failure. For us it is a verdict. One setup agent paper found hardware insufficiency was the top failure class on its benchmark (paper, self-reported).
-- They report success when an install finishes. We only report success after a clean replay reaches the repo's own check.
-- They do not try macOS. One multi-platform setup paper skipped macOS because no public macOS CLI images exist (paper, self-reported).
+| Setup agents | Make Anything Compatible |
+| --- | --- |
+| Pick a Docker base image | Reads the machine you actually have, and treats it as the constraint |
+| Treat "this hardware can't do it" as a failure. One paper found hardware insufficiency was its top failure class (self-reported) | Treats it as a verdict, with the reason and the cheapest alternative |
+| Report success when an install finishes | Reports success only after a clean replay reaches the repo's own check |
+| Skip macOS. One multi-platform paper had no public macOS CLI images to test on (self-reported) | Starts on a real Mac |
 
-Sources are in [Prior art](#prior-art) below.
-
-## What counts as done
+## When we'll call v1 done
 
 The first version is done only when all four hold. The full text is [decision 005](docs/decisions/005-mvp-win-condition.md).
 
@@ -219,7 +223,7 @@ The first target is one real machine. Field names stay general so other constrai
 
 | Part | Value | Why it matters | Source |
 | --- | --- | --- | --- |
-| Model | MacBook Pro 14,1 (2017) | The last supported macOS for it is Ventura | prior notes |
+| Model | MacBook Pro 14,1 (2017) | The last supported macOS for it is Ventura. Apple's Sonoma list starts at the 2018 MacBook Pro | [Apple: Sonoma compatible computers](https://support.apple.com/en-us/105113) |
 | CPU | Intel Core i5-7360U | AVX2 yes, AVX-512 no | [Intel ARK](https://www.intel.com/content/www/us/en/products/sku/97535/intel-core-i57360u-processor-4m-cache-up-to-3-60-ghz/specifications.html) |
 | GPU | Intel Iris Plus 640 | Metal 3 capable, no Metal 4. Metal compute is unreliable for some ML code | [Apple Metal support](https://support.apple.com/en-us/102894) |
 | RAM | 8 GB | "It installed" and "it is usable" are different answers | prior notes |
@@ -256,12 +260,14 @@ Numbers are what each source reports. Tags say who is speaking. Metrics differ b
 | [Repo2Run](https://arxiv.org/abs/2502.13681) | Builds a Dockerfile for Python repos | 86.0% build success on 420 repos | paper, self-reported |
 | [RAT, RunAnyThing](https://arxiv.org/abs/2604.23190) | Multi-language setup agent in containers | Hardware-dependent environments are out of scope | paper |
 | [EvoConfig](https://arxiv.org/abs/2601.16489) | Environment configuration agent | Hardware insufficiency is 32.4% of its failures on EnvBench | paper, self-reported |
-| [RepoLaunch](https://arxiv.org/abs/2603.05026) | Windows and Linux setup | macOS not tested, no public macOS CLI images | paper, self-reported |
+| [RepoLaunch](https://arxiv.org/abs/2603.05026) | Setup on Windows, Linux, Android, and embedded targets ([HTML paper](https://arxiv.org/html/2603.05026)) | macOS not tested, no public macOS CLI images | paper, self-reported |
 | [Graph2Env](https://arxiv.org/abs/2609.33429) | Setup with clean rebuild checks | A general coding agent beat older specialized setup agents on hard Python repos | paper, self-reported |
 | [MacPorts legacy-support](https://github.com/macports/macports-legacy-support) | Backfills missing APIs on old OS X | Aimed at much older releases than Ventura | vendor |
 | [REA](https://github.com/morluto/rea) | Agent tool for inspecting binaries | Reads a Mach-O's minimum OS and SDK. An optional probe for us, see [decision 007](docs/decisions/007-optional-binary-probe.md) | vendor |
 
-Unverified so far: Colima, Lima, and OrbStack on Ventura; whether conda-forge PyTorch keeps MPS on Intel; GPU family limits for Iris Plus 640; OpenCore Legacy Patcher on this exact model.
+Unverified so far: Colima, Lima, and OrbStack on Ventura; whether conda-forge PyTorch keeps MPS on Intel; GPU family limits for Iris Plus 640, because Apple's [Metal Feature Set Tables](https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf) list Apple GPUs only.
+
+OpenCore Legacy Patcher: its [MODELS.md](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/MODELS.md) lists MacBookPro14,1. The latest stable release is 2.5.1, and the newest tag is 3.0.0-rc.5 ([releases](https://github.com/dortania/OpenCore-Legacy-Patcher/releases)). Tahoe on this model is still a release candidate. MAC reports this path and never runs it.
 
 </details>
 
@@ -277,7 +283,7 @@ Spec stage. Nothing is implemented. Issues are the source of work.
 | [#4](https://github.com/Troy-LL/make-anything-compatible/issues/4) | Recipe, throwaway run, and clean replay | #3 |
 | [#5](https://github.com/Troy-LL/make-anything-compatible/issues/5) | Skills pack and CLI | #1, #3, #4 |
 
-Docs: [architecture](docs/architecture.md), [design](docs/design.md), [eval](docs/eval.md), decisions [001](docs/decisions/001-constrained-hardware-first-host.md), [002](docs/decisions/002-adapt-the-software-not-the-host.md), [003](docs/decisions/003-three-verdicts-honest-walls.md), [004](docs/decisions/004-clean-replay-is-the-proof.md), [005](docs/decisions/005-mvp-win-condition.md), [006](docs/decisions/006-skills-first-interface.md), [007](docs/decisions/007-optional-binary-probe.md).
+Docs: [architecture](docs/architecture.md), [design](docs/design.md), [eval](docs/eval.md), and the [decision index](docs/decisions/README.md).
 
 ## Want to help?
 

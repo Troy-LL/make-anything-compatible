@@ -1,7 +1,7 @@
 name: Eval repo
 description: Suggest a GitHub repo that fails on an older Mac today, for the frozen set.
 title: "[eval] "
-labels: []
+labels: ["eval"]
 body:
   - type: markdown
     attributes:

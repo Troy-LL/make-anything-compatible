@@ -1,7 +1,7 @@
 name: Host report
 description: Describe a constrained machine you would like the doctor to support later.
 title: "[host] "
-labels: []
+labels: ["host"]
 body:
   - type: markdown
     attributes:

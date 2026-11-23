@@ -14,6 +14,7 @@ required=(
   docs/architecture.md
   docs/design.md
   docs/eval.md
+  docs/decisions/README.md
   docs/decisions/001-constrained-hardware-first-host.md
   docs/decisions/002-adapt-the-software-not-the-host.md
   docs/decisions/003-three-verdicts-honest-walls.md
@@ -45,7 +46,7 @@ for line in Path("AGENTS.md").read_text(encoding="utf-8").splitlines():
                 problems.append(f"mapped but missing: {part}")
 
 # Every decision needs a status line.
-for path in sorted(Path("docs/decisions").glob("*.md")):
+for path in sorted(Path("docs/decisions").glob("[0-9][0-9][0-9]-*.md")):
     if not re.search(r"^Status: (Accepted|Proposed|Superseded)", path.read_text(encoding="utf-8"), re.M):
         problems.append(f"{path}: no Status line")
 

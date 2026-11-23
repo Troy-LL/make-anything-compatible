@@ -26,8 +26,9 @@ These come from earlier research, checked on 15 Nov 2026 (Asia/Manila). They are
 | --- | --- | --- | --- |
 | [pytorch/pytorch](https://github.com/pytorch/pytorch) | Python ML | Fix: pin `torch==2.2.2` | [Deprecation notice](https://dev-discuss.pytorch.org/t/pytorch-macos-x86-builds-deprecation-starting-january-2024/1690) |
 | [tensorflow/tensorflow](https://github.com/tensorflow/tensorflow) | Python ML | Fix: pin `tensorflow==2.16.2` | [v2.16.1 notes](https://github.com/tensorflow/tensorflow/releases/tag/v2.16.1) |
+| `microsoft/onnxruntime` (no link while it 404s) | Python ML | Fix: pin `onnxruntime==1.23.2` | [PyPI files](https://pypi.org/project/onnxruntime/#files): 1.23.2 is the last release with `macosx_13_0_x86_64` wheels. See the note below |
 | [jax-ml/jax](https://github.com/jax-ml/jax) | Python ML | Fix: pin `jax` and `jaxlib` 0.4.38 | [v0.5.0 notes](https://github.com/jax-ml/jax/releases/tag/jax-v0.5.0) |
-| [faiss-wheels/faiss-wheels](https://github.com/faiss-wheels/faiss-wheels) | Python ML | Fix: pin `faiss-cpu==1.12.0` | [issue #126](https://github.com/faiss-wheels/faiss-wheels/issues/126) |
+| [faiss-wheels/faiss-wheels](https://github.com/faiss-wheels/faiss-wheels) | Python ML | Fix: pin `faiss-cpu==1.12.0` | [1.12.0 files](https://pypi.org/project/faiss-cpu/1.12.0/#files) (`macosx_13_0_x86_64`). [Issue #126](https://github.com/faiss-wheels/faiss-wheels/issues/126) covers 1.11.0 needing macOS 14 |
 | [Comfy-Org/ComfyUI](https://github.com/Comfy-Org/ComfyUI) | Python ML | Fix: torch pin and `--cpu` | [issue #3096](https://github.com/Comfy-Org/ComfyUI/issues/3096) |
 | [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) | Python ML | Fix: Intel Mac torch pin, CPU | [PR #15851](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/15851) |
 | [oobabooga/textgen](https://github.com/oobabooga/textgen) | Python ML | Fix: torch 2.2.2 first | [issue #6444](https://github.com/oobabooga/textgen/issues/6444) |
@@ -36,7 +37,7 @@ These come from earlier research, checked on 15 Nov 2026 (Asia/Manila). They are
 | [ml-explore/mlx-lm](https://github.com/ml-explore/mlx-lm) | Python ML | Wall | [README](https://github.com/ml-explore/mlx-lm) |
 | [bitsandbytes-foundation/bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes) | Python ML | Wall | [README](https://github.com/bitsandbytes-foundation/bitsandbytes/blob/main/README.md) |
 | [vllm-project/vllm](https://github.com/vllm-project/vllm) | Python ML | Wall natively | [issue #17212](https://github.com/vllm-project/vllm/issues/17212) |
-| [Dao-AILab/flash-attention](https://github.com/Dao-AILab/flash-attention) | Python ML | Wall | [issue #873](https://github.com/Dao-AILab/flash-attention/issues/873) |
+| [Dao-AILab/flash-attention](https://github.com/Dao-AILab/flash-attention) | Python ML | Wall | [README requirements](https://github.com/Dao-AILab/flash-attention) (CUDA or ROCm, Linux). [Issue #873](https://github.com/Dao-AILab/flash-attention/issues/873) is weak evidence: a generic `CUDA_HOME` install error |
 | [triton-lang/triton](https://github.com/triton-lang/triton) | Python ML | Wall | [issue #1465](https://github.com/triton-lang/triton/issues/1465) |
 | [unslothai/unsloth](https://github.com/unslothai/unsloth) | Python ML | Wall for training | [issue #5046](https://github.com/unslothai/unsloth/issues/5046) |
 | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) | Native | Fix: no GPU offload, Metal off | [issue #4004](https://github.com/ggml-org/llama.cpp/issues/4004) |
@@ -46,7 +47,8 @@ These come from earlier research, checked on 15 Nov 2026 (Asia/Manila). They are
 | [ollama/ollama](https://github.com/ollama/ollama) | Go | Fix: stay on v0.12.4, block auto-update | [issue #12572](https://github.com/ollama/ollama/issues/12572) |
 | [mudler/LocalAI](https://github.com/mudler/LocalAI) | Go | Wall natively. Maybe a container | [PR #7616](https://github.com/mudler/LocalAI/pull/7616) |
 
-ONNX Runtime was in that research (pin `onnxruntime==1.23.2`), but its GitHub repo returned 404 on 23 Nov 2026 (Asia/Manila). It is held out until that resolves. The [PyPI page](https://pypi.org/project/onnxruntime/) still lists it.
+
+ONNX Runtime note: the GitHub repo returns 404. A [third-party report](https://techmeasured.com/repos/microsoft-onnx-runtime-github-repo-404-ci-builds-break-nuget-pypi-still-work-what-to-do) says Microsoft made it private around Nov 18, 2026 (Asia/Manila). We found no Microsoft statement. If that report is right, the repo was made private, not moved. The PyPI files are still there, so the row stays, and issue #2 confirms the repo is reachable before freezing it.
 
 Two more from that research are host checks, not repos: Xcode (stay on 15.2) and LM Studio (closed app, Intel not supported). They stay out of the frozen set.
 

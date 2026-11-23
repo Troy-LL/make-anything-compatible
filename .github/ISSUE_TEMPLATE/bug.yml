@@ -1,7 +1,7 @@
 name: Bug or stale fact
 description: Something in the docs or a future run is wrong, or a fact about another project is out of date.
 title: "[bug] "
-labels: []
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
