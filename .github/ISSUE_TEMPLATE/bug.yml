@@ -1,0 +1,30 @@
+name: Bug or stale fact
+description: Something in the docs or a future run is wrong, or a fact about another project is out of date.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. If this is a security issue, use a [private advisory](https://github.com/Troy-LL/make-anything-compatible/security/advisories/new) instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What is wrong
+      description: What did you see, or which line in the docs?
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: A link that shows the correct fact, or the commands that reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: host
+    attributes:
+      label: Your host
+      description: Model, macOS version, CPU, RAM. The output of `compat probe` once it exists.
+    validations:
+      required: false

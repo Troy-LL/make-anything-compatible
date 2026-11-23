@@ -1,0 +1,49 @@
+name: Eval repo
+description: Suggest a GitHub repo that fails on an older Mac today, for the frozen set.
+title: "[eval] "
+labels: ["eval"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The frozen set is built in [issue #2](https://github.com/Troy-LL/make-anything-compatible/issues/2). The Node, Go, and Rust slice needs the most rows. A link that shows the failure is required.
+  - type: input
+    id: repo
+    attributes:
+      label: Repo URL
+    validations:
+      required: true
+  - type: dropdown
+    id: slice
+    attributes:
+      label: Slice
+      options:
+        - Python ML
+        - Native (Swift, Xcode SDK, C or C++)
+        - Node, Go, or Rust CLI
+    validations:
+      required: true
+  - type: textarea
+    id: fails
+    attributes:
+      label: What fails, and the evidence link
+      description: Release notes, registry data, docs, or an issue from the project itself.
+    validations:
+      required: true
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: What you expect the right answer to be
+      options:
+        - Runs with a fix
+        - Hard wall
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Success check
+      description: The README demo command or test command that proves it runs.
+    validations:
+      required: false
