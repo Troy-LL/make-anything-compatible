@@ -29,4 +29,5 @@ jobs:
             --max-concurrency 4
             --exclude 'intel\.com'
             --exclude 'appleinsider\.com'
+            --remap 'https://github\.com/([^/]+)/([^/]+)/blob/(.+) https://raw.githubusercontent.com/$1/$2/$3'
             '**/*.md'

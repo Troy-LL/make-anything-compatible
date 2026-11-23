@@ -8,7 +8,7 @@ These docs make claims about other projects: which versions ship for which OS, a
 
 ## Link checks
 
-The docs CI checks every link, except appleinsider.com and intel.com. Those sites block bots, so the checker skips them. Their links were checked by hand.
+The docs CI checks every link, except appleinsider.com and intel.com. Those sites block bots, so the checker skips them. Their links were checked by hand. GitHub file links (`/blob/`) are checked through their raw file URLs, because GitHub often answers bots with 503 on those pages.
 
 ## Pull requests
 
